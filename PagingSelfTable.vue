@@ -3,10 +3,11 @@
     <el-table :data="tableData" border v-bind="$attrs" v-on="$listeners">
       <slot />
     </el-table>
-    <el-pagination :current-page="page" :page-size="size" :page-sizes="pageSizes" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange" />
+    <el-pagination :current-page="page" :page-size="size" :page-sizes="pageSizes" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange" background
+      style="text-align: center;margin-top: 10px;" />
   </div>
 </template>
-<script>
+  <script>
 export default {
   props: {
     // 全部数据(待分页)
@@ -18,7 +19,7 @@ export default {
     // 可选择的一页多少条
     pageSizes: {
       type: Array,
-      default: () => [10, 50, 100]
+      default: () => [1, 10, 50, 100]
     }
   },
   data() {
@@ -44,6 +45,10 @@ export default {
     // 数据更新时，重新获取表格数据
     allData: {
       handler() {
+        // 如果最后一页减少数据，导致当前页没有数据，则跳转到上一页
+        if (this.allData.length && this.page > Math.ceil(this.allData.length / this.size)) {
+          this.page = Math.ceil(this.allData.length / this.size)
+        }
         this.getTabelData()
       },
       immediate: true
@@ -74,4 +79,4 @@ export default {
     }
   }
 }
-</script>
+  </script>
